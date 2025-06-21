@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .skill-btn {
+        @apply relative transition-transform duration-200 ease-in-out;
+    }
+    .skill-btn:active {
+        @apply transform scale-90;
+    }
+    .skill-btn .cooldown-overlay {
+        @apply absolute inset-0 bg-dark/70 rounded-full flex items-center justify-center text-light text-xl font-bold pointer-events-none;
+        clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 100%, 0 100%, 0 0);
+        transition: clip-path 0.1s linear;
+    }
+}
+
+@layer utilities {
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .animate-pulse-fast {
+        animation: pulse-fast 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse-fast {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .7;
+    }
+}
+
+.joystick-dot {
+    transition: transform 0.1s ease-out;
+}
