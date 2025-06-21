@@ -47,6 +47,7 @@ let character = {
     health: 100, // 生命值
     maxHealth: 100, // 最大生命值
     direction: { x: 0, y: 0 }, // 移动方向
+    lastDirection: { x: 1, y: 0 }, // 新增：最后一次的移动方向
     weapon: 'pistol', // 当前武器
     weaponLevel: 1, // 武器等级
     skillCooldown: {
@@ -322,6 +323,8 @@ function updateJoystick(e) {
     // 角色方向只取决于角度
     character.direction.x = Math.cos(angle);
     character.direction.y = Math.sin(angle);
+    character.lastDirection.x = character.direction.x;
+    character.lastDirection.y = character.direction.y;
 
     // 摇杆圆点位置
     const constrainedDistance = Math.min(distance, maxDistance);
@@ -518,7 +521,10 @@ function drawCharacter() {
     // 武器绘制
     ctx.strokeStyle = currentWeapon.bulletColor;
     const weaponLength = character.width * 0.6;
-    const weaponAngle = Math.atan2(character.direction.y, character.direction.x) || 0;
+    const shootDirection = (character.direction.x === 0 && character.direction.y === 0)
+        ? character.lastDirection
+        : character.direction;
+    const weaponAngle = Math.atan2(shootDirection.y, shootDirection.x);
     
     ctx.beginPath();
     ctx.moveTo(screenX, screenY);
@@ -747,7 +753,10 @@ function drawEnemies() {
 // 射击
 function shoot() {
     const weapon = currentWeapon;
-    const angle = Math.atan2(character.direction.y, character.direction.x) || 0;
+    const shootDirection = (character.direction.x === 0 && character.direction.y === 0)
+        ? character.lastDirection
+        : character.direction;
+    const angle = Math.atan2(shootDirection.y, shootDirection.x);
     
     bullets.push({
         x: character.x + Math.cos(angle) * (character.width / 2 + 10),
